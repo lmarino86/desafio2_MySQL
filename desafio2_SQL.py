@@ -9,21 +9,21 @@ class CuentaBancaria:
         self.__titular = titular
 
     def depositar(self, monto):
-        """Realiza un depósito en la cuenta."""
+        # Realiza un depósito en la cuenta.
         if monto > 0:
             self.__saldo += monto
         else:
             raise ValueError("El monto de depósito debe ser positivo.")
 
     def retirar(self, monto):
-        """Realiza un retiro de la cuenta."""
+        # Realiza un retiro de la cuenta.
         if 0 < monto <= self.__saldo:
             self.__saldo -= monto
         else:
             raise ValueError("Monto de retiro inválido o saldo insuficiente.")
 
     def obtener_info(self):
-        """Devuelve la información de la cuenta."""
+        # Devuelve la información de la cuenta.
         return {
             "numero_cuenta": self.__numero_cuenta,
             "saldo": float(self.__saldo),
@@ -39,7 +39,7 @@ class CuentaBancariaCorriente(CuentaBancaria):
         self.__descubierto = descubierto
 
     def retirar(self, monto):
-        """Realiza un retiro considerando el descubierto."""
+        # Realiza un retiro considerando el descubierto.
         if 0 < monto <= self._CuentaBancaria__saldo + self.__descubierto:
             self._CuentaBancaria__saldo -= monto
         else:
@@ -56,7 +56,7 @@ class CuentaBancariaAhorro(CuentaBancaria):
         self.__tasa_interes = tasa_interes
 
     def aplicar_interes(self):
-        """Aplica la tasa de interés al saldo."""
+        # Aplica la tasa de interés al saldo.
         self._CuentaBancaria__saldo += self._CuentaBancaria__saldo * (self.__tasa_interes / 100)
 
     def obtener_info(self):
@@ -70,7 +70,7 @@ class GestionCuentas:
         self.create_table()
 
     def create_connection(self, db_config):
-        """Crea la conexión a la base de datos."""
+        # Crea la conexión a la base de datos.
         connection = None
         try:
             connection = mysql.connector.connect(**db_config)
@@ -79,7 +79,7 @@ class GestionCuentas:
         return connection
 
     def create_table(self):
-        """Crea la tabla de cuentas si no existe."""
+        # Crea la tabla de cuentas si no existe.
         create_table_query = """
         CREATE TABLE IF NOT EXISTS cuentas (
             numero_cuenta VARCHAR(255) PRIMARY KEY,
@@ -95,7 +95,7 @@ class GestionCuentas:
         self.connection.commit()
 
     def agregar_cuenta(self, cuenta):
-        """Agrega una nueva cuenta a la base de datos."""
+        # Agrega una nueva cuenta a la base de datos.
         try:
             cursor = self.connection.cursor()
             insert_query = """
@@ -117,7 +117,7 @@ class GestionCuentas:
             print(f"Error al agregar la cuenta: {e}")
 
     def eliminar_cuenta(self, numero_cuenta):
-        """Elimina una cuenta de la base de datos."""
+        # Elimina una cuenta de la base de datos.
         try:
             cursor = self.connection.cursor()
             delete_query = "DELETE FROM cuentas WHERE numero_cuenta = %s"
@@ -127,7 +127,7 @@ class GestionCuentas:
             print(f"Error al eliminar la cuenta: {e}")
     
     def obtener_cuenta(self, numero_cuenta):
-        """Obtiene una cuenta de la base de datos."""
+        # Obtiene una cuenta de la base de datos.
         cursor = self.connection.cursor(dictionary=True)
         query = "SELECT * FROM cuentas WHERE numero_cuenta = %s"
         cursor.execute(query, (numero_cuenta,))
@@ -143,7 +143,7 @@ class GestionCuentas:
 
 
     def actualizar_cuenta(self, numero_cuenta, saldo=None, titular=None):
-        """Actualiza la información de una cuenta."""
+        # Actualiza la información de una cuenta.
         try:
             cursor = self.connection.cursor()
             update_fields = []
@@ -161,3 +161,4 @@ class GestionCuentas:
             self.connection.commit()
         except Error as e:
             print(f"Error al actualizar la cuenta: {e}")
+
